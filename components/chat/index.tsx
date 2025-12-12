@@ -1,7 +1,7 @@
 /**
  * Main Chat Component - VercelV0Chat
  * Orchestrates the chat interface with all sub-components
- * Includes localStorage persistence for conversations
+ * Integrates Gemini AI for chat and calculation detection
  */
 
 "use client";
@@ -9,7 +9,7 @@
 import { useState, useEffect } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { ChatConversation, ChatMessage } from "@/lib/types";
-import { useCalculateTax, useSendChatMessage } from "@/lib/hooks";
+import { useCalculateTax } from "@/lib/hooks";
 import {
   createUserMessage,
   createAssistantMessage,
@@ -25,10 +25,15 @@ import {
   createTaxApiPayload,
   formatTaxResponse,
 } from "@/lib/form-helpers";
+import {
+  sendMessageToGemini,
+  detectCalculationResponse,
+} from "@/lib/gemini-client";
 import { WelcomeScreen } from "@/components/chat/WelcomeScreen";
 import { ChatSidebar } from "@/components/chat/ChatSidebar";
 import { MessagesDisplay } from "@/components/chat/MessagesDisplay";
 import { ChatInput } from "@/components/chat/ChatInput";
+import { ScrollArea } from "../ui/scroll-area";
 
 const STORAGE_KEY = "matthew_conversations";
 
@@ -43,7 +48,6 @@ export function VercelV0Chat() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const { mutate: calculateTax } = useCalculateTax();
-  const { mutate: sendChatMessage } = useSendChatMessage();
 
   // Load conversations from localStorage on mount
   useEffect(() => {
@@ -118,6 +122,8 @@ export function VercelV0Chat() {
       );
       setCurrentConversationId(newConversation.id);
       setConversations([newConversation]);
+      setValue("");
+      handleGeminiChat(newConversation.id, [userMessage]);
     } else {
       const updated = addMessageToConversation(
         conversations,
@@ -125,35 +131,79 @@ export function VercelV0Chat() {
         userMessage
       );
       setConversations(updated);
-    }
+      setValue("");
 
-    setValue("");
-    sendChatMessage(
-      { message },
-      {
-        onSuccess: (response) => {
-          const assistantMessage = createAssistantMessage(
-            response.response || "No response"
-          );
-          setConversations((prev) =>
-            addMessageToConversation(
-              prev,
-              currentConversationId!,
-              assistantMessage
-            )
-          );
-          setIsCalculating(false);
-        },
-        onError: (error) => {
-          const errorMessage = createErrorMessage(error);
-          setConversations((prev) =>
-            addMessageToConversation(prev, currentConversationId!, errorMessage)
-          );
-          setIsCalculating(false);
-        },
-      }
-    );
+      const currentConv = conversations.find(
+        (c) => c.id === currentConversationId
+      )!;
+      const historyMessages = currentConv.messages.map((msg) => ({
+        role: msg.role === "assistant" ? ("model" as const) : ("user" as const),
+        parts: [{ text: msg.content }],
+      }));
+
+      handleGeminiChat(currentConversationId!, [
+        ...historyMessages,
+        userMessage,
+      ]);
+    }
+  };
+
+  const handleGeminiChat = async (conversationId: string, messages: any[]) => {
     setIsCalculating(true);
+    try {
+      const historyForGemini = messages.slice(0, -1).map((msg) => {
+        let text = "";
+        if (typeof msg === "object" && "content" in msg) {
+          text = msg.content;
+        } else if (typeof msg === "object" && "parts" in msg) {
+          text = msg.parts[0]?.text || "";
+        } else {
+          text = String(msg);
+        }
+
+        const role =
+          typeof msg === "object" && "role" in msg && msg.role === "assistant"
+            ? "model"
+            : "user";
+        return {
+          role: role as "user" | "model",
+          parts: [{ text }],
+        };
+      });
+
+      const lastMessage = messages[messages.length - 1];
+      const lastMessageText =
+        typeof lastMessage === "object" && "content" in lastMessage
+          ? lastMessage.content
+          : lastMessage;
+
+      const aiResponse = await sendMessageToGemini(
+        historyForGemini,
+        lastMessageText
+      );
+
+      // Detect if this is a calculation response
+      const { isCalculation, data } = detectCalculationResponse(aiResponse);
+
+      const assistantMessage: ChatMessage = createAssistantMessage(aiResponse);
+      if (isCalculation && data) {
+        assistantMessage.isCalculation = true;
+        assistantMessage.calculationData = data;
+      }
+
+      setConversations((prev) =>
+        addMessageToConversation(prev, conversationId, assistantMessage)
+      );
+    } catch (error) {
+      const errorMessage = createErrorMessage(
+        error instanceof Error ? error : new Error(String(error))
+      );
+      setConversations((prev) =>
+        addMessageToConversation(prev, conversationId, errorMessage)
+      );
+    } finally {
+      setIsCalculating(false);
+    }
   };
 
   const handleFormSubmit = (formData: any, formType: string) => {
@@ -239,15 +289,15 @@ export function VercelV0Chat() {
           onDeleteConversation={handleDeleteConversation}
         />
 
-        <div className="flex flex-col flex-1 overflow-hidden">
+        <div className="flex flex-col flex-1 h-full overflow-hidden">
           {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-8">
-            <div className="max-w-4xl mx-auto">
+          <div className="flex-1! p-8">
+            <ScrollArea className="max-w-4xl mx-auto  flex-1 h-[calc(100vh-200px)]">
               <MessagesDisplay
                 conversation={currentConversation}
                 isCalculating={isCalculating}
               />
-            </div>
+            </ScrollArea>
           </div>
 
           {/* Input Area */}

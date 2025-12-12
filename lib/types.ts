@@ -7,6 +7,15 @@ export interface ChatMessage {
   role: "user" | "assistant";
   content: string;
   timestamp: Date;
+  isCalculation?: boolean;
+  calculationData?: {
+    taxType: string;
+    totalAmount: number;
+    currency: string;
+    breakdown?: Record<string, any>;
+    dueDate?: string;
+    installments?: number;
+  };
 }
 
 export interface ChatConversation {
