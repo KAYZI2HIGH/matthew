@@ -2,12 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -23,24 +18,24 @@ import {
 } from "@/components/ui/sidebar";
 import { FileText, SquarePen, Bell } from "lucide-react";
 
-type TabType = "Reminder" | "New Audit" | "Audit";
+type TabType = "reminder" | "newAudit" | "auditHistory";
 
 export function AuditDialog({ children }: { children: React.ReactNode }) {
-  const [activeTab, setActiveTab] = useState<TabType>("Reminder");
+  const [activeTab, setActiveTab] = useState<TabType>("reminder");
 
   const tabs: { id: TabType; label: string; icon: React.ReactNode }[] = [
     {
-      id: "Reminder",
+      id: "reminder",
       label: "Reminder",
       icon: <Bell className="w-4 h-4" />,
     },
     {
-      id: "New Audit",
+      id: "newAudit",
       label: "New Audit",
       icon: <SquarePen className="w-4 h-4" />,
     },
     {
-      id: "Audit History",
+      id: "auditHistory",
       label: "Audit History",
       icon: <FileText className="w-4 h-4" />,
     },
@@ -80,7 +75,7 @@ export function AuditDialog({ children }: { children: React.ReactNode }) {
 
             {/* Content Area */}
             <div className="flex-1 overflow-y-auto p-6 w-full">
-              {activeTab === "Reminder" && (
+              {activeTab === "reminder" && (
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-white">
                     Audit Reminder
@@ -131,7 +126,7 @@ export function AuditDialog({ children }: { children: React.ReactNode }) {
                 </div>
               )}
 
-              {activeTab === "New Audit" && (
+              {activeTab === "newAudit" && (
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-white">
                     Create New Audit
@@ -180,7 +175,7 @@ export function AuditDialog({ children }: { children: React.ReactNode }) {
                 </div>
               )}
 
-              {activeTab === "Audit" && (
+              {activeTab === "auditHistory" && (
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-white">
                     Audit History
