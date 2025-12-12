@@ -64,7 +64,7 @@ export function WelcomeScreen({
       <h1 className="text-[12rem] tracking-wide font-mooner-outline absolute top-1/2 left-1/2 -translate-1/2 opacity-20">
         MATTHEW
       </h1>
-      <div className="flex flex-col justify-center items-center gap-4">
+      <div className="flex flex-col justify-center items-center gap-2">
         <Logo size="lg" />
         <h1 className="text-4xl tracking-wide font-semibold text-black dark:text-white">
           Let's Calculate Your Taxes

@@ -21,6 +21,7 @@ import {
 import { SquarePen, Search, BrickWallShield, Trash2 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { ChatConversation } from "@/lib/types";
+import { AuditDialog } from "../custom-ui/AuditDialog";
 
 interface ChatSidebarProps {
   conversations: ChatConversation[];
@@ -75,12 +76,14 @@ export function ChatSidebar({
                   <span>Search Chats</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton className="cursor-pointer">
-                  <BrickWallShield className="w-4 h-4" />
-                  <span>Audits</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+                <SidebarMenuItem>
+              <AuditDialog>
+                  <SidebarMenuButton className="cursor-pointer">
+                    <BrickWallShield className="w-4 h-4" />
+                    <span>Audits</span>
+                  </SidebarMenuButton>
+              </AuditDialog>
+                </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

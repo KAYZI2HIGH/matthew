@@ -1,11 +1,12 @@
 /**
  * Main Chat Component - VercelV0Chat
  * Orchestrates the chat interface with all sub-components
+ * Includes localStorage persistence for conversations
  */
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { ChatConversation, ChatMessage } from "@/lib/types";
 import { useCalculateTax, useSendChatMessage } from "@/lib/hooks";
@@ -29,6 +30,8 @@ import { ChatSidebar } from "@/components/chat/ChatSidebar";
 import { MessagesDisplay } from "@/components/chat/MessagesDisplay";
 import { ChatInput } from "@/components/chat/ChatInput";
 
+const STORAGE_KEY = "matthew_conversations";
+
 export function VercelV0Chat() {
   const [value, setValue] = useState("");
   const [conversations, setConversations] = useState<ChatConversation[]>([]);
@@ -37,9 +40,55 @@ export function VercelV0Chat() {
   >(null);
   const [hasStartedChat, setHasStartedChat] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const { mutate: calculateTax } = useCalculateTax();
   const { mutate: sendChatMessage } = useSendChatMessage();
+
+  // Load conversations from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try {
+          const parsedConversations = JSON.parse(stored);
+          // Convert date strings back to Date objects
+          const conversationsWithDates = parsedConversations.map(
+            (conv: any) => ({
+              ...conv,
+              createdAt: new Date(conv.createdAt),
+              updatedAt: new Date(conv.updatedAt),
+              messages: conv.messages.map((msg: any) => ({
+                ...msg,
+                timestamp: new Date(msg.timestamp),
+              })),
+            })
+          );
+
+          setConversations(conversationsWithDates);
+
+          // Auto-select the most recent conversation
+          if (conversationsWithDates.length > 0) {
+            setCurrentConversationId(conversationsWithDates[0].id);
+            setHasStartedChat(true);
+          }
+        } catch (error) {
+          console.error(
+            "Failed to load conversations from localStorage:",
+            error
+          );
+        }
+      }
+      setIsLoaded(true);
+    }
+  }, []);
+
+  // Save conversations to localStorage whenever they change
+  useEffect(() => {
+    if (isLoaded && typeof window !== "undefined") {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+    }
+  }, [conversations, isLoaded]);
 
   const currentConversation = conversations.find(
     (c) => c.id === currentConversationId
@@ -162,6 +211,10 @@ export function VercelV0Chat() {
       setValue("");
     }
   };
+
+  if (!isLoaded) {
+    return null; // Wait for localStorage to load
+  }
 
   if (!hasStartedChat) {
     return (
