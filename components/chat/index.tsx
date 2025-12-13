@@ -281,18 +281,21 @@ export function VercelV0Chat() {
   return (
     <SidebarProvider>
       <div className="flex h-screen w-full bg-neutral-950 relative">
-        <ChatSidebar
-          conversations={conversations}
-          currentConversationId={currentConversationId}
-          onNewChat={handleNewChat}
-          onSelectConversation={setCurrentConversationId}
-          onDeleteConversation={handleDeleteConversation}
-        />
+        {/* Sidebar - Hidden on mobile, visible on md+ */}
+        <div className="hidden md:block md:w-64 lg:w-80 flex-shrink-0">
+          <ChatSidebar
+            conversations={conversations}
+            currentConversationId={currentConversationId}
+            onNewChat={handleNewChat}
+            onSelectConversation={setCurrentConversationId}
+            onDeleteConversation={handleDeleteConversation}
+          />
+        </div>
 
-        <div className="flex flex-col flex-1 h-full overflow-hidden">
+        <div className="flex flex-col flex-1 h-full overflow-hidden w-full">
           {/* Messages Area */}
-          <div className="flex-1! p-8">
-            <ScrollArea className="max-w-4xl mx-auto  flex-1 h-[calc(100vh-200px)]">
+          <div className="flex-1 overflow-hidden px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+            <ScrollArea className="max-w-2xl sm:max-w-3xl lg:max-w-4xl mx-auto h-[calc(100vh-180px)] sm:h-[calc(100vh-200px)]">
               <MessagesDisplay
                 conversation={currentConversation}
                 isCalculating={isCalculating}
@@ -301,8 +304,8 @@ export function VercelV0Chat() {
           </div>
 
           {/* Input Area */}
-          <div className="border-t border-neutral-800 p-4 bg-neutral-950">
-            <div className="max-w-4xl mx-auto">
+          <div className="border-t border-neutral-800 p-3 sm:p-4 lg:p-6 bg-neutral-950 flex-shrink-0">
+            <div className="max-w-2xl sm:max-w-3xl lg:max-w-4xl mx-auto">
               <ChatInput
                 value={value}
                 onChange={setValue}

@@ -60,19 +60,19 @@ export function WelcomeScreen({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-screen max-w-4xl mx-auto p-4 space-y-8 relative">
-      <h1 className="text-[12rem] tracking-wide font-mooner-outline absolute top-1/2 left-1/2 -translate-1/2 opacity-20">
+    <div className="flex flex-col items-center justify-center w-full h-screen max-w-2xl sm:max-w-3xl lg:max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8 relative">
+      <h1 className="text-6xl sm:text-8xl lg:text-[12rem] tracking-wide font-mooner-outline absolute top-1/2 left-1/2 -translate-1/2 opacity-20">
         MATTHEW
       </h1>
       <div className="flex flex-col justify-center items-center gap-2">
         <Logo size="lg" />
-        <h1 className="text-4xl tracking-wide font-semibold text-black dark:text-white">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl tracking-wide font-semibold text-black dark:text-white text-center">
           Let's Calculate Your Taxes
         </h1>
       </div>
 
       <div className="w-full">
-        <div className="relative bg-neutral-900 rounded-xl border border-neutral-800">
+        <div className="relative bg-neutral-900 rounded-lg sm:rounded-xl border border-neutral-800">
           <div className="overflow-y-auto">
             <Textarea
               ref={textareaRef}
@@ -84,15 +84,15 @@ export function WelcomeScreen({
               onKeyDown={handleKeyDown}
               placeholder="Tell me about your business or investments..."
               className={cn(
-                "w-full px-4 py-3",
+                "w-full px-3 sm:px-4 py-2 sm:py-3",
                 "resize-none",
                 "bg-transparent",
                 "border-none",
-                "text-white text-sm",
+                "text-white text-sm sm:text-base",
                 "focus:outline-none",
                 "focus-visible:ring-0 focus-visible:ring-offset-0",
-                "placeholder:text-neutral-500 placeholder:text-sm",
-                "min-h-15"
+                "placeholder:text-neutral-500 placeholder:text-sm sm:placeholder:text-base",
+                "min-h-12 sm:min-h-15"
               )}
               style={{
                 overflow: "hidden",
@@ -101,24 +101,24 @@ export function WelcomeScreen({
             />
           </div>
 
-          <div className="flex items-center justify-between p-3">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between p-2 sm:p-3 gap-2 sm:gap-3">
+            <div className="flex items-center gap-1 sm:gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant={"ghost"}
                     type="button"
-                    className="group p-2 hover:bg-neutral-800 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                    className="group p-1.5 sm:p-2 hover:bg-neutral-800 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
                     disabled={isLoading}
                   >
                     <Paperclip className="w-4 h-4 text-white" />
-                    <span className="text-xs text-zinc-400 hidden group-hover:inline transition-opacity">
+                    <span className="text-xs text-zinc-400 hidden sm:group-hover:inline transition-opacity">
                       Form
                     </span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  className="w-56"
+                  className="w-48 sm:w-56"
                   align="start"
                 >
                   <DropdownMenuItem
@@ -126,7 +126,7 @@ export function WelcomeScreen({
                       setSelectedForm("paye");
                       setIsFormOpen(true);
                     }}
-                    className="flex items-center gap-3 cursor-pointer"
+                    className="flex items-center gap-3 cursor-pointer text-sm"
                   >
                     <DollarSign className="w-4 h-4" />
                     <div className="flex flex-col">
@@ -139,7 +139,7 @@ export function WelcomeScreen({
                       setSelectedForm("business");
                       setIsFormOpen(true);
                     }}
-                    className="flex items-center gap-3 cursor-pointer"
+                    className="flex items-center gap-3 cursor-pointer text-sm"
                   >
                     <Briefcase className="w-4 h-4" />
                     <div className="flex flex-col">
@@ -154,7 +154,7 @@ export function WelcomeScreen({
                       setSelectedForm("crypto");
                       setIsFormOpen(true);
                     }}
-                    className="flex items-center gap-3 cursor-pointer"
+                    className="flex items-center gap-3 cursor-pointer text-sm"
                   >
                     <Wallet className="w-4 h-4" />
                     <div className="flex flex-col">
@@ -164,22 +164,23 @@ export function WelcomeScreen({
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
               <Button
                 variant={"ghost"}
                 type="button"
-                className="px-2 py-1 rounded-lg text-xs text-zinc-400 transition-colors border border-dashed border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800 flex items-center justify-between gap-1 cursor-pointer"
+                className="px-2 py-1 sm:px-2 sm:py-1.5 rounded-lg text-xs transition-colors border border-dashed border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800 flex items-center justify-between gap-1 cursor-pointer"
                 disabled={isLoading}
+                title="Upload File"
               >
                 <PlusIcon className="w-4 h-4" />
-                Upload File
+                <span className="hidden sm:inline">Upload</span>
               </Button>
               <Button
                 variant={"ghost"}
                 type="button"
                 disabled={isLoading || !value.trim()}
                 className={cn(
-                  "px-1.5 py-1.5 rounded-lg text-sm transition-colors border border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800 flex items-center justify-between gap-1 cursor-pointer disabled:opacity-50",
+                  "px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg text-sm transition-colors border border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800 flex items-center justify-center gap-1 cursor-pointer disabled:opacity-50 flex-shrink-0",
                   value.trim() && !isLoading
                     ? "bg-white text-black"
                     : "text-zinc-400"

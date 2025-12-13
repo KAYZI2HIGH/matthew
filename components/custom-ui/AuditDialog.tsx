@@ -174,13 +174,13 @@ export function AuditDialog({ children, calculationData }: AuditDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-175 min-h-[80vh]! z-1000 p-0! overflow-hidden bg-[#1E1E1E] font-sans">
+      <DialogContent className="w-[95vw] max-w-[95vw] sm:max-w-2xl md:max-w-4xl lg:max-w-6xl min-h-[70vh] sm:min-h-[80vh] z-1000 p-0! overflow-hidden bg-[#1E1E1E] font-sans">
         <div className="flex h-full w-full flex-col">
-          <div className="flex h-full w-full gap-0 overflow-hidden">
+          <div className="flex h-full w-full gap-0 overflow-hidden flex-col sm:flex-row">
             {/* Sidebar */}
-            <div className="w-48 shrink-0 border-r overflow-hidden">
+            <div className="hidden sm:block w-40 md:w-48 shrink-0 border-r border-neutral-700 overflow-hidden">
               <Sidebar>
-                <SidebarContent className="min-w-48 py-3">
+                <SidebarContent className="min-w-40 md:min-w-48 py-3">
                   <SidebarGroup>
                     <SidebarGroupContent>
                       <SidebarMenu>
@@ -189,10 +189,10 @@ export function AuditDialog({ children, calculationData }: AuditDialogProps) {
                             <SidebarMenuButton
                               isActive={activeTab === tab.id}
                               onClick={() => setActiveTab(tab.id)}
-                              className="cursor-pointer"
+                              className="cursor-pointer text-xs sm:text-sm"
                             >
                               {tab.icon}
-                              <span>{tab.label}</span>
+                              <span className="hidden sm:inline">{tab.label}</span>
                             </SidebarMenuButton>
                           </SidebarMenuItem>
                         ))}
@@ -203,43 +203,61 @@ export function AuditDialog({ children, calculationData }: AuditDialogProps) {
               </Sidebar>
             </div>
 
+            {/* Mobile Tab Selector */}
+            <div className="sm:hidden flex gap-2 p-3 border-b border-neutral-700 overflow-x-auto">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded whitespace-nowrap text-xs transition-colors ${
+                    activeTab === tab.id
+                      ? "bg-blue-600 text-white"
+                      : "bg-neutral-800 text-neutral-400 hover:bg-neutral-700"
+                  }`}
+                >
+                  {tab.icon}
+                  <span>{tab.label}</span>
+                </button>
+              ))}
+            </div>
+
             {/* Content Area */}
-            <div className="flex-1 overflow-y-auto p-6 w-full">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 w-full">
               {activeTab === "reminder" && (
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-4">
+                    <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">
                       Payment Schedules
                     </h3>
-                    <div className="space-y-3">
+                    <div className="space-y-2 sm:space-y-3">
                       {paymentSchedules.map((schedule) => (
                         <div
                           key={schedule.id}
-                          className="p-4 bg-neutral-800 rounded-lg border border-neutral-700 hover:border-blue-500 transition-colors"
+                          className="p-3 sm:p-4 bg-neutral-800 rounded-lg border border-neutral-700 hover:border-blue-500 transition-colors"
                         >
-                          <div className="flex justify-between items-start mb-3">
+                          <div className="flex justify-between items-start mb-2 sm:mb-3 flex-col sm:flex-row gap-2">
                             <div>
-                              <p className="text-white font-semibold">
+                              <p className="text-white font-semibold text-sm sm:text-base">
                                 {schedule.taxType}
                               </p>
                               <p className="text-xs text-neutral-400">
                                 ID: {schedule.id}
                               </p>
                             </div>
-                            <span className={`text-xs px-3 py-1 rounded ${getStatusBadgeColor(schedule.status)}`}>
+                            <span className={`text-xs px-2 sm:px-3 py-1 rounded whitespace-nowrap ${getStatusBadgeColor(schedule.status)}`}>
                               {schedule.status.charAt(0).toUpperCase() +
                                 schedule.status.slice(1)}
                             </span>
                           </div>
-                          <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div className="grid grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
                             <div>
-                              <p className="text-neutral-400">Total Amount</p>
-                              <p className="text-white font-semibold">
+                              <p className="text-neutral-400 text-xs sm:text-sm">Total Amount</p>
+                              <p className="text-white font-semibold text-sm sm:text-base">
                                 {schedule.totalAmount}
                               </p>
                             </div>
                             <div>
-                              <p className="text-neutral-400">Due Date</p>
+                              <p className="text-neutral-400 text-xs sm:text-sm">Due Date</p>
                               <p className="text-white font-semibold">
                                 {schedule.dueDate}
                               </p>

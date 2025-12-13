@@ -69,7 +69,7 @@ export function ChatInput({
 
   return (
     <>
-      <div className="relative bg-neutral-900 rounded-xl border border-neutral-800">
+      <div className="relative bg-neutral-900 rounded-lg sm:rounded-xl border border-neutral-800">
         <div className="overflow-y-auto">
           <Textarea
             ref={textareaRef}
@@ -81,15 +81,15 @@ export function ChatInput({
             onKeyDown={handleKeyDown}
             placeholder="Tell me about your business or investments..."
             className={cn(
-              "w-full px-4 py-3",
+              "w-full px-3 sm:px-4 py-2 sm:py-3",
               "resize-none",
               "bg-transparent",
               "border-none",
-              "text-white",
+              "text-white text-sm sm:text-base",
               "focus:outline-none",
               "focus-visible:ring-0 focus-visible:ring-offset-0",
               "placeholder:text-neutral-500",
-              "min-h-15"
+              "min-h-12 sm:min-h-15"
             )}
             style={{
               overflow: "hidden",
@@ -98,24 +98,24 @@ export function ChatInput({
           />
         </div>
 
-        <div className="flex items-center justify-between p-3">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between p-2 sm:p-3 gap-2 sm:gap-3">
+          <div className="flex items-center gap-1 sm:gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant={"ghost"}
                   type="button"
-                  className="group p-2 hover:bg-neutral-800 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  className="group p-1.5 sm:p-2 hover:bg-neutral-800 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
                   disabled={isLoading}
                 >
                   <Paperclip className="w-4 h-4 text-white" />
-                  <span className="text-xs text-zinc-400 hidden group-hover:inline transition-opacity">
+                  <span className="text-xs text-zinc-400 hidden sm:group-hover:inline transition-opacity">
                     Form
                   </span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="w-56"
+                className="w-48 sm:w-56"
                 align="start"
               >
                 <DropdownMenuItem
@@ -123,7 +123,7 @@ export function ChatInput({
                     setSelectedForm("business");
                     setIsFormOpen(true);
                   }}
-                  className="flex items-center gap-3 cursor-pointer"
+                  className="flex items-center gap-3 cursor-pointer text-sm"
                 >
                   <Briefcase className="w-4 h-4" />
                   <div className="flex flex-col">
@@ -136,7 +136,7 @@ export function ChatInput({
                     setSelectedForm("paye");
                     setIsFormOpen(true);
                   }}
-                  className="flex items-center gap-3 cursor-pointer"
+                  className="flex items-center gap-3 cursor-pointer text-sm"
                 >
                   <DollarSign className="w-4 h-4" />
                   <div className="flex flex-col">
@@ -149,7 +149,7 @@ export function ChatInput({
                     setSelectedForm("crypto");
                     setIsFormOpen(true);
                   }}
-                  className="flex items-center gap-3 cursor-pointer"
+                  className="flex items-center gap-3 cursor-pointer text-sm"
                 >
                   <Wallet className="w-4 h-4" />
                   <div className="flex flex-col">
@@ -159,22 +159,23 @@ export function ChatInput({
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <Button
               variant={"ghost"}
               type="button"
-              className="px-2 py-1 rounded-lg text-xs text-zinc-400 transition-colors border border-dashed border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800 flex items-center justify-between gap-1 cursor-pointer"
+              className="px-2 py-1 sm:px-2 sm:py-1.5 rounded-lg text-xs transition-colors border border-dashed border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800 flex items-center justify-between gap-1 cursor-pointer"
               disabled={isLoading}
+              title="Upload File"
             >
               <PlusIcon className="w-4 h-4" />
-              Upload File
+              <span className="hidden sm:inline">Upload</span>
             </Button>
             <Button
               variant={"ghost"}
               type="button"
               disabled={isLoading || !value.trim()}
               className={cn(
-                "px-1.5 py-1.5 rounded-lg text-sm transition-colors border border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800 flex items-center justify-between gap-1 cursor-pointer disabled:opacity-50",
+                "px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg text-sm transition-colors border border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800 flex items-center justify-center gap-1 cursor-pointer disabled:opacity-50 flex-shrink-0",
                 value.trim() && !isLoading
                   ? "bg-white text-black"
                   : "text-zinc-400"
