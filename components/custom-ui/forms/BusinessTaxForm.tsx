@@ -8,7 +8,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Upload } from "lucide-react";
+import { Upload, AlertCircle } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Field,
@@ -20,6 +20,7 @@ import {
   FieldSeparator,
   FieldSet,
 } from "@/components/ui/field";
+import { validateBusinessStep } from "@/lib/form-validation";
 
 interface BusinessTaxFormProps {
   onSubmit: (data: any) => void;
@@ -48,6 +49,7 @@ export function BusinessTaxForm({ onSubmit, onCancel }: BusinessTaxFormProps) {
     taxPaid: "",
   });
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   const handleChange = (field: string, value: string) => {
     const updated = { ...formData, [field]: value };
@@ -77,12 +79,19 @@ export function BusinessTaxForm({ onSubmit, onCancel }: BusinessTaxFormProps) {
   };
 
   const handleNext = () => {
+    const validation = validateBusinessStep(currentStep, formData);
+    if (!validation.isValid) {
+      setValidationErrors(validation.errors);
+      return;
+    }
+    setValidationErrors([]);
     if (currentStep < BUSINESS_STEPS.length) {
       setCurrentStep(currentStep + 1);
     }
   };
 
   const handlePrev = () => {
+    setValidationErrors([]);
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
@@ -447,6 +456,28 @@ export function BusinessTaxForm({ onSubmit, onCancel }: BusinessTaxFormProps) {
             </FieldGroup>
           )}
         </ScrollArea>
+
+        {/* Validation Errors */}
+        {validationErrors.length > 0 && (
+          <div className="p-3 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-md">
+            <div className="flex gap-2 items-start">
+              <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
+              <div className="flex-1">
+                <p className="text-xs font-semibold text-red-900 dark:text-red-100 mb-1">
+                  Please fix the following:
+                </p>
+                <ul className="text-xs text-red-800 dark:text-red-200 space-y-0.5">
+                  {validationErrors.map((error, idx) => (
+                    <li key={idx} className="flex items-start gap-1">
+                      <span className="mt-1">•</span>
+                      <span>{error}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Navigation Buttons */}
         <div className="flex gap-2 pt-4 border-t">

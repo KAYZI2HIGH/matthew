@@ -130,13 +130,13 @@ export function ChatSidebar({
       <SidebarFooter className="border-t border-neutral-800 p-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-            DV
+            CE
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-white truncate">
-              Dada Victory
+              Carter Efe
             </p>
-            <p className="text-xs text-neutral-400">Free</p>
+            <p className="text-xs text-neutral-400">Free Plan</p>
           </div>
         </div>
       </SidebarFooter>
