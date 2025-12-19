@@ -77,14 +77,14 @@ export function ChatSidebar({
                   <span>Search Chats</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              <SidebarMenuItem>
+              {/* <SidebarMenuItem>
                 <AuditDialog>
                   <SidebarMenuButton className="cursor-pointer">
                     <BrickWallShield className="w-4 h-4" />
                     <span>Audits</span>
                   </SidebarMenuButton>
                 </AuditDialog>
-              </SidebarMenuItem>
+              </SidebarMenuItem> */}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
