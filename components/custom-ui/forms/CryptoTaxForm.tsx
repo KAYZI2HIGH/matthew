@@ -34,6 +34,11 @@ const CRYPTO_STEPS = [
   "Documents",
 ];
 
+// Helper component to display required field indicator
+const RequiredIndicator = () => (
+  <span className="text-red-500 ml-0.5">*</span>
+);
+
 export function CryptoTaxForm({ onSubmit, onCancel }: CryptoTaxFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [inputMethod, setInputMethod] = useState<"manual" | "hash">("manual");
@@ -87,6 +92,15 @@ export function CryptoTaxForm({ onSubmit, onCancel }: CryptoTaxFormProps) {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
+  };
+
+  // Check if current step is valid for proceeding
+  const canProceedToNext = () => {
+    if (currentStep === CRYPTO_STEPS.length) {
+      return true; // Last step, no validation needed for Next button
+    }
+    const validation = validateCryptoStep(currentStep, formData, inputMethod);
+    return validation.isValid;
   };
 
   const progressPercent = (currentStep / CRYPTO_STEPS.length) * 100;
@@ -148,6 +162,7 @@ export function CryptoTaxForm({ onSubmit, onCancel }: CryptoTaxFormProps) {
                         htmlFor="token-name"
                       >
                         Token Name
+                        <RequiredIndicator />
                       </FieldLabel>
                       <FieldContent className="gap-1">
                         <Input
@@ -173,6 +188,7 @@ export function CryptoTaxForm({ onSubmit, onCancel }: CryptoTaxFormProps) {
                         htmlFor="quantity"
                       >
                         Quantity
+                        <RequiredIndicator />
                       </FieldLabel>
                       <FieldContent className="gap-1">
                         <Input
@@ -198,6 +214,7 @@ export function CryptoTaxForm({ onSubmit, onCancel }: CryptoTaxFormProps) {
                         htmlFor="buy-price"
                       >
                         Buy Price (₦/unit)
+                        <RequiredIndicator />
                       </FieldLabel>
                       <FieldContent className="gap-1">
                         <Input
@@ -222,6 +239,7 @@ export function CryptoTaxForm({ onSubmit, onCancel }: CryptoTaxFormProps) {
                         htmlFor="sell-price"
                       >
                         Sell Price (₦/unit)
+                        <RequiredIndicator />
                       </FieldLabel>
                       <FieldContent className="gap-1">
                         <Input
@@ -248,6 +266,7 @@ export function CryptoTaxForm({ onSubmit, onCancel }: CryptoTaxFormProps) {
                         htmlFor="tx-hash"
                       >
                         Transaction Hash
+                        <RequiredIndicator />
                       </FieldLabel>
                       <FieldContent className="gap-1">
                         <Input
@@ -288,6 +307,7 @@ export function CryptoTaxForm({ onSubmit, onCancel }: CryptoTaxFormProps) {
                     htmlFor="purchase-date"
                   >
                     Purchase Date
+                    <RequiredIndicator />
                   </FieldLabel>
                   <FieldContent className="gap-1">
                     <Input
@@ -311,6 +331,7 @@ export function CryptoTaxForm({ onSubmit, onCancel }: CryptoTaxFormProps) {
                     htmlFor="sale-date"
                   >
                     Sale Date
+                    <RequiredIndicator />
                   </FieldLabel>
                   <FieldContent className="gap-1">
                     <Input
@@ -413,7 +434,10 @@ export function CryptoTaxForm({ onSubmit, onCancel }: CryptoTaxFormProps) {
                 </p>
                 <ul className="text-xs text-red-800 dark:text-red-200 space-y-0.5">
                   {validationErrors.map((error, idx) => (
-                    <li key={idx} className="flex items-start gap-1">
+                    <li
+                      key={idx}
+                      className="flex items-start gap-1"
+                    >
                       <span className="mt-1">•</span>
                       <span>{error}</span>
                     </li>
@@ -440,8 +464,9 @@ export function CryptoTaxForm({ onSubmit, onCancel }: CryptoTaxFormProps) {
             <Button
               type="button"
               onClick={handleNext}
+              disabled={!canProceedToNext()}
               size="sm"
-              className="flex-1 text-xs h-8"
+              className="flex-1 text-xs h-8 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next
             </Button>

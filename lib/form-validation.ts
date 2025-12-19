@@ -18,7 +18,10 @@ export const validatePayeStep = (
 
   if (step === 1) {
     // Income step validation
-    if (!formData.monthlySalary || parseFloat(String(formData.monthlySalary)) <= 0) {
+    if (
+      !formData.monthlySalary ||
+      parseFloat(String(formData.monthlySalary)) <= 0
+    ) {
       errors.push("Monthly salary is required and must be greater than 0");
     }
     if (formData.allowances && parseFloat(String(formData.allowances)) < 0) {
@@ -28,16 +31,25 @@ export const validatePayeStep = (
 
   if (step === 2) {
     // Deductions step validation
-    if (formData.pensionContribution && parseFloat(String(formData.pensionContribution)) < 0) {
+    if (
+      formData.pensionContribution &&
+      parseFloat(String(formData.pensionContribution)) < 0
+    ) {
       errors.push("Pension contribution cannot be negative");
     }
     if (formData.nhf && parseFloat(String(formData.nhf)) < 0) {
       errors.push("NHF cannot be negative");
     }
-    if (formData.lifeInsurance && parseFloat(String(formData.lifeInsurance)) < 0) {
+    if (
+      formData.lifeInsurance &&
+      parseFloat(String(formData.lifeInsurance)) < 0
+    ) {
       errors.push("Life insurance cannot be negative");
     }
-    if (formData.otherDeductions && parseFloat(String(formData.otherDeductions)) < 0) {
+    if (
+      formData.otherDeductions &&
+      parseFloat(String(formData.otherDeductions)) < 0
+    ) {
       errors.push("Other deductions cannot be negative");
     }
   }
@@ -90,10 +102,16 @@ export const validateBusinessStep = (
 
   if (step === 3) {
     // Additional Income step validation
-    if (formData.salariesPaid && parseFloat(String(formData.salariesPaid)) < 0) {
+    if (
+      formData.salariesPaid &&
+      parseFloat(String(formData.salariesPaid)) < 0
+    ) {
       errors.push("Salaries paid cannot be negative");
     }
-    if (formData.capitalGains && parseFloat(String(formData.capitalGains)) < 0) {
+    if (
+      formData.capitalGains &&
+      parseFloat(String(formData.capitalGains)) < 0
+    ) {
       errors.push("Capital gains cannot be negative");
     }
     if (formData.cryptoGains && parseFloat(String(formData.cryptoGains)) < 0) {
@@ -145,7 +163,10 @@ export const validateCryptoStep = (
         }
       }
     } else if (inputMethod === "hash") {
-      if (!formData.transactionHash || String(formData.transactionHash).trim() === "") {
+      if (
+        !formData.transactionHash ||
+        String(formData.transactionHash).trim() === ""
+      ) {
         errors.push("Transaction hash is required");
       }
     }

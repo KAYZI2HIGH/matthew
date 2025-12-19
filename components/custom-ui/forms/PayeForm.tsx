@@ -29,6 +29,11 @@ interface PayeFormProps {
 
 const PAYE_STEPS = ["Income", "Deductions", "Reliefs", "Documents"];
 
+// Helper component to display required field indicator
+const RequiredIndicator = () => (
+  <span className="text-red-500 ml-0.5">*</span>
+);
+
 export function PayeForm({ onSubmit, onCancel }: PayeFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -86,6 +91,15 @@ export function PayeForm({ onSubmit, onCancel }: PayeFormProps) {
     }
   };
 
+  // Check if current step is valid for proceeding
+  const canProceedToNext = () => {
+    if (currentStep === PAYE_STEPS.length) {
+      return true; // Last step, no validation needed for Next button
+    }
+    const validation = validatePayeStep(currentStep, formData);
+    return validation.isValid;
+  };
+
   const progressPercent = (currentStep / PAYE_STEPS.length) * 100;
 
   return (
@@ -117,6 +131,7 @@ export function PayeForm({ onSubmit, onCancel }: PayeFormProps) {
                     htmlFor="monthly-salary"
                   >
                     Monthly Salary (₦)
+                    <RequiredIndicator />
                   </FieldLabel>
                   <FieldContent className="gap-1">
                     <Input
@@ -384,7 +399,10 @@ export function PayeForm({ onSubmit, onCancel }: PayeFormProps) {
                 </p>
                 <ul className="text-xs text-red-800 dark:text-red-200 space-y-0.5">
                   {validationErrors.map((error, idx) => (
-                    <li key={idx} className="flex items-start gap-1">
+                    <li
+                      key={idx}
+                      className="flex items-start gap-1"
+                    >
                       <span className="mt-1">•</span>
                       <span>{error}</span>
                     </li>
@@ -411,8 +429,9 @@ export function PayeForm({ onSubmit, onCancel }: PayeFormProps) {
             <Button
               type="button"
               onClick={handleNext}
+              disabled={!canProceedToNext()}
               size="sm"
-              className="flex-1 text-xs h-8"
+              className="flex-1 text-xs h-8 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next
             </Button>

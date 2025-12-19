@@ -34,6 +34,11 @@ const BUSINESS_STEPS = [
   "Documents",
 ];
 
+// Helper component to display required field indicator
+const RequiredIndicator = () => (
+  <span className="text-red-500 ml-0.5">*</span>
+);
+
 export function BusinessTaxForm({ onSubmit, onCancel }: BusinessTaxFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -97,6 +102,15 @@ export function BusinessTaxForm({ onSubmit, onCancel }: BusinessTaxFormProps) {
     }
   };
 
+  // Check if current step is valid for proceeding
+  const canProceedToNext = () => {
+    if (currentStep === BUSINESS_STEPS.length) {
+      return true; // Last step, no validation needed for Next button
+    }
+    const validation = validateBusinessStep(currentStep, formData);
+    return validation.isValid;
+  };
+
   const progressPercent = (currentStep / BUSINESS_STEPS.length) * 100;
 
   return (
@@ -128,6 +142,7 @@ export function BusinessTaxForm({ onSubmit, onCancel }: BusinessTaxFormProps) {
                     htmlFor="business-name"
                   >
                     Business Name
+                    <RequiredIndicator />
                   </FieldLabel>
                   <FieldContent className="gap-1">
                     <Input
@@ -189,6 +204,7 @@ export function BusinessTaxForm({ onSubmit, onCancel }: BusinessTaxFormProps) {
                       htmlFor="revenue"
                     >
                       Annual Revenue (₦)
+                      <RequiredIndicator />
                     </FieldLabel>
                     <FieldContent className="gap-1">
                       <Input
@@ -214,6 +230,7 @@ export function BusinessTaxForm({ onSubmit, onCancel }: BusinessTaxFormProps) {
                       htmlFor="expenses"
                     >
                       Annual Expenses (₦)
+                      <RequiredIndicator />
                     </FieldLabel>
                     <FieldContent className="gap-1">
                       <Input
@@ -468,7 +485,10 @@ export function BusinessTaxForm({ onSubmit, onCancel }: BusinessTaxFormProps) {
                 </p>
                 <ul className="text-xs text-red-800 dark:text-red-200 space-y-0.5">
                   {validationErrors.map((error, idx) => (
-                    <li key={idx} className="flex items-start gap-1">
+                    <li
+                      key={idx}
+                      className="flex items-start gap-1"
+                    >
                       <span className="mt-1">•</span>
                       <span>{error}</span>
                     </li>
@@ -495,8 +515,9 @@ export function BusinessTaxForm({ onSubmit, onCancel }: BusinessTaxFormProps) {
             <Button
               type="button"
               onClick={handleNext}
+              disabled={!canProceedToNext()}
               size="sm"
-              className="flex-1 text-xs h-8"
+              className="flex-1 text-xs h-8 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next
             </Button>
