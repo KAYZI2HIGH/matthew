@@ -148,19 +148,6 @@ export function WelcomeScreen({
                       </span>
                     </div>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setSelectedForm("crypto");
-                      setIsFormOpen(true);
-                    }}
-                    className="flex items-center gap-3 cursor-pointer text-sm"
-                  >
-                    <Wallet className="w-4 h-4" />
-                    <div className="flex flex-col">
-                      <span className="font-medium font-sans">Crypto Tax</span>
-                    </div>
-                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
