@@ -7,6 +7,7 @@ import { PayeForm } from "./forms/PayeForm";
 import { BusinessTaxForm } from "./forms/BusinessTaxForm";
 import { CryptoTaxForm } from "./forms/CryptoTaxForm";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import { ScrollArea } from "../ui/scroll-area";
 
 interface FormTypeSelectorProps {
   isOpen: boolean;
@@ -40,25 +41,27 @@ export function FormTypeSelector({
       open={isOpen}
       onOpenChange={onClose}
     >
-      <DialogContent className="max-w-2xl! max-h-[80vh]! overflow-y-auto bg-[#1E1E1E] font-sans">
-        {selectedForm === "paye" && (
-          <PayeForm
-            onSubmit={handleFormSubmit}
-            onCancel={onClose}
-          />
-        )}
-        {selectedForm === "business" && (
-          <BusinessTaxForm
-            onSubmit={handleFormSubmit}
-            onCancel={onClose}
-          />
-        )}
-        {selectedForm === "crypto" && (
-          <CryptoTaxForm
-            onSubmit={handleFormSubmit}
-            onCancel={onClose}
-          />
-        )}
+      <DialogContent className="max-w-2xl! max-h-[80vh]! bg-[#1E1E1E] font-sans z-999">
+        <ScrollArea className="h-[80vh]!">
+          {selectedForm === "paye" && (
+            <PayeForm
+              onSubmit={handleFormSubmit}
+              onCancel={onClose}
+            />
+          )}
+          {selectedForm === "business" && (
+            <BusinessTaxForm
+              onSubmit={handleFormSubmit}
+              onCancel={onClose}
+            />
+          )}
+          {selectedForm === "crypto" && (
+            <CryptoTaxForm
+              onSubmit={handleFormSubmit}
+              onCancel={onClose}
+            />
+          )}
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

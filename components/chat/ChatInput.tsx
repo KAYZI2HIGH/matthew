@@ -160,7 +160,7 @@ export function ChatInput({
             </DropdownMenu>
           </div>
           <div className="flex items-center gap-1 sm:gap-2">
-            <Button
+            {/* <Button
               variant={"ghost"}
               type="button"
               className="px-2 py-1 sm:px-2 sm:py-1.5 rounded-lg text-xs transition-colors border border-dashed border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800 flex items-center justify-between gap-1 cursor-pointer"
@@ -169,7 +169,7 @@ export function ChatInput({
             >
               <PlusIcon className="w-4 h-4" />
               <span className="hidden sm:inline">Upload</span>
-            </Button>
+            </Button> */}
             <Button
               variant={"ghost"}
               type="button"

@@ -282,7 +282,7 @@ export function VercelV0Chat() {
     <SidebarProvider>
       <div className="flex h-screen w-full bg-neutral-950 relative">
         {/* Sidebar - Hidden on mobile, visible on md+ */}
-        <div className="hidden md:block md:w-64 lg:w-80 flex-shrink-0">
+        <div className="hidden md:block md:w-64 lg:w-80 shrink-0">
           <ChatSidebar
             conversations={conversations}
             currentConversationId={currentConversationId}
