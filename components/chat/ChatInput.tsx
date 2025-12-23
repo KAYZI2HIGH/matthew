@@ -143,24 +143,11 @@ export function ChatInput({
                     <span className="font-medium font-sans">PAYE Tax</span>
                   </div>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => {
-                    setSelectedForm("crypto");
-                    setIsFormOpen(true);
-                  }}
-                  className="flex items-center gap-3 cursor-pointer text-sm"
-                >
-                  <Wallet className="w-4 h-4" />
-                  <div className="flex flex-col">
-                    <span className="font-medium font-sans">Crypto Tax</span>
-                  </div>
-                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
           <div className="flex items-center gap-1 sm:gap-2">
-            {/* <Button
+            <Button
               variant={"ghost"}
               type="button"
               className="px-2 py-1 sm:px-2 sm:py-1.5 rounded-lg text-xs transition-colors border border-dashed border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800 flex items-center justify-between gap-1 cursor-pointer"
@@ -169,7 +156,7 @@ export function ChatInput({
             >
               <PlusIcon className="w-4 h-4" />
               <span className="hidden sm:inline">Upload</span>
-            </Button> */}
+            </Button>
             <Button
               variant={"ghost"}
               type="button"
